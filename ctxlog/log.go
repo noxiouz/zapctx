@@ -70,7 +70,7 @@ func GetSugaredLogger(ctx context.Context) *zap.SugaredLogger {
 var traceBitCoreOption = zap.WrapCore(
 	func(core zapcore.Core) zapcore.Core {
 		return traceBitCore{
-			core: core,
+			Core: core,
 		}
 	})
 
@@ -79,7 +79,7 @@ func withTraceBitCore(l *zap.Logger) *zap.Logger {
 }
 
 type traceBitCore struct {
-	core zapcore.Core
+	zapcore.Core
 }
 
 func (t traceBitCore) Enabled(lvl zapcore.Level) bool {
@@ -94,10 +94,6 @@ func (t traceBitCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcor
 }
 
 func (t traceBitCore) With(f []zapcore.Field) zapcore.Core {
-	t.core = t.core.With(f)
+	t.Core = t.Core.With(f)
 	return t
-}
-
-func (t traceBitCore) Write(e zapcore.Entry, f []zapcore.Field) error {
-	return t.core.Write(e, f)
 }
